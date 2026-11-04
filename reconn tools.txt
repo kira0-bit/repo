@@ -1,0 +1,56 @@
+================================================================
+ EXPERIMENT 03 - NETWORK SCANNING CHEATSHEET
+ Tools: Advance IP Scanner, Nmap, Zenmap, Nessus
+================================================================
+
+--- LO1: ACTIVE HOST ENUMERATION (Advance IP Scanner) ---
+Download : https://www.advanced-ip-scanner.com
+Usage    : Open tool -> enter IP range (e.g. 192.168.1.1/24)
+           -> Click "Scan" -> view live IPs, hostnames, MAC, manufacturer.
+
+--- LO2: PORT SCANNING / OS DETECTION / SERVICE ENUM (Nmap & Zenmap) ---
+Download : https://nmap.org/download
+
+# Scan a single target
+nmap pristine.lab.meta1
+
+# Scan a range of IP addresses
+nmap 192.168.1.1-100
+
+# Scan an entire subnet (CIDR notation)
+nmap 192.168.1.0/24
+
+# OS detection on a specific port
+sudo nmap -O pristine.lab.unknown -p 80
+
+# Zenmap (GUI) equivalent - Intense Scan profile
+nmap -T4 -A -v <target_ip>
+
+--- LO3: VULNERABILITY ASSESSMENT (Nessus) ---
+Download : https://www.tenable.com/downloads/nessus
+
+Steps:
+1. Scans -> New Scan -> Advanced Scan
+2. Enter Name + Target IP -> Save
+3. Launch scan (play button)
+4. View Vulnerabilities list (sorted by severity: Critical/High/Medium/Low/Info)
+
+================================================================
+ QUICK REFERENCE - COMMON NMAP FLAGS
+================================================================
+-sS         SYN stealth scan
+-sT         TCP connect scan
+-sU         UDP scan
+-O          OS detection
+-A          Aggressive scan (OS, version, script, traceroute)
+-p <ports>  Specify ports (e.g. -p22,80,443 or -p1-1000)
+-T4         Timing template (faster)
+-v          Verbose output
+--exclude   Exclude hosts/networks
+
+================================================================
+ LEARNING OUTCOMES
+================================================================
+LO1: Ping Sweeping / Active Host Enumeration
+LO2: Port Scanning & Service Enumeration (Nmap/Zenmap)
+LO3: Vulnerability Assessment (Nessus)

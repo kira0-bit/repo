@@ -1,0 +1,57 @@
+================================================================
+ EXPERIMENT 05 - ANONYMITY TOOLS CHEATSHEET
+ Tools: Hide.me, AnonymoX, TMAC, Macchanger, Tor, Tails OS
+================================================================
+
+--- LO1: WEB PROXY / IP PROXY ---
+
+# Hide.me (Web Proxy)
+URL   : https://hide.me/en/
+Steps : VPN Apps -> Free Proxy -> enter target URL -> choose location -> Go
+Check original IP at: https://www.whatismyip.com
+
+# AnonymoX (Browser extension / IP proxy)
+Install: Firefox -> Menu (3-line icon) -> Add-ons -> Extensions -> search
+         "anonymoX" -> Add to Firefox -> Add -> Enable toggle
+Verify : https://www.whatismyip.com (IP/location should change)
+
+--- LO2: MAC ADDRESS SPOOFING ---
+
+# TMAC (Windows) - https://technitium.com/tmac/
+1. Download & extract setup -> install
+2. Launch app -> select adapter
+3. Click "Random MAC Address" -> "Change Now!"
+4. Verify: ipconfig /all   (check "Physical Address")
+5. Revert: click "Restore Original"
+
+# Macchanger (Kali Linux)
+sudo apt install macchanger          # install
+ip link                              # list interfaces
+sudo ip link set eth0 down           # bring interface down
+sudo macchanger -p eth0              # show permanent MAC
+sudo macchanger -r eth0              # randomize MAC
+sudo ip link set eth0 up             # bring interface back up
+
+--- LO3: TOR BROWSER ---
+Download : https://www.torproject.org/download/
+Install  : select language -> Install -> Finish
+
+--- LO4: TAILS OS (in VirtualBox) ---
+Download ISO: https://tails.net/install/download-iso/index.en.html
+
+Steps:
+1. VirtualBox -> New -> Name, Type: Linux, Version: Other Linux (64-bit)
+2. Memory: allocate >= 2048 MB RAM
+3. Hard drive: "Do not add a virtual hard drive"
+4. Machine -> Settings -> System -> enable "I/O APIC"
+5. Settings -> Storage -> Controller IDE -> Empty -> choose Tails ISO
+6. Check "Live CD/DVD" -> OK
+7. Select VM -> Start
+
+================================================================
+ LEARNING OUTCOMES
+================================================================
+LO1: Web Proxy & IP Proxy usage (Hide.me, AnonymoX)
+LO2: MAC Address changing on Windows (TMAC) & Linux (Macchanger)
+LO3: Installing & using TOR browser
+LO4: Installing & using Tails OS

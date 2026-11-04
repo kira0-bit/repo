@@ -1,0 +1,208 @@
+Here is the complete Kali Linux command sequence for your website vulnerability assessment.
+
+Target:
+
+```
+TARGET="tic-tac-toe-five-red-68.vercel.app"
+URL="https://$TARGET"
+```
+
+## Step 1. Create assessment folder
+
+```
+mkdir -p ~/Vulnerability-Assessment/{DNS,Nmap,HTTP,ZAP,Reports}
+cd ~/Vulnerability-Assessment
+```
+
+## Step 2. DNS enumeration
+
+1\. Basic DNS lookup
+
+```
+nslookup $TARGET
+```
+
+2\. A record
+
+```
+dig $TARGET A
+```
+
+3\. AAAA record
+
+```
+dig $TARGET AAAA
+```
+
+4\. MX record
+
+```
+dig $TARGET MX
+```
+
+5\. NS record
+
+```
+dig $TARGET NS
+```
+
+6\. TXT record
+
+```
+dig $TARGET TXT
+```
+
+7\. DNS enumeration
+
+```
+dnsenum $TARGET
+```
+
+Save results:
+
+```
+dnsenum $TARGET > DNS/dnsenum.txt
+```
+
+## Step 3. Nmap scanning
+
+Start with basic scanning:
+
+```
+nmap $TARGET
+```
+
+Specific web ports:
+
+```
+nmap -p 80,443 $TARGET
+```
+
+Service detection:
+
+```
+nmap -sV -p 80,443 $TARGET
+```
+
+Save output:
+
+```
+nmap -sV -p 80,443 -oN Nmap/nmap-results.txt $TARGET
+```
+
+Only scan the authorized application endpoints. Do not run broad port scans or NSE vulnerability scripts against shared Vercel infrastructure without explicit authorization.
+
+## Step 4. HTTP security headers
+
+```
+curl -I $URL
+```
+
+Save output:
+
+```
+curl -sS -D HTTP/headers.txt -o /dev/null $URL
+```
+
+Check HTTPS certificate:
+
+```
+echo | openssl s_client -connect $TARGET:443 \
+-servername $TARGET 2>/dev/null | \
+openssl x509 -noout -subject -issuer -dates
+```
+
+## Step 5. MXToolbox
+
+MXToolbox is web-based, so there is no Kali command required.
+
+Open: [MXToolbox SuperTool](https://mxtoolbox.com/SuperTool.aspx?utm_source=chatgpt.com)
+
+Perform:
+
+1. DNS Lookup
+2. MX Lookup
+3. SPF Lookup
+4. DMARC Lookup
+5. Blacklist Check (only if relevant)
+
+Save screenshots for the report.
+
+## Step 6. Shodan
+
+Open: [Shodan](https://www.shodan.io/?utm_source=chatgpt.com)
+
+Search the IPs returned by DNS:
+
+```
+64.29.17.67
+216.198.79.67
+```
+
+Record:
+
+- Open ports
+- Service banners
+- ISP
+- ASN
+- Hostnames
+
+Remember these are shared Vercel infrastructure addresses.
+
+## Step 7. OWASP ZAP
+
+Launch:
+
+```
+zaproxy
+```
+
+Then:
+
+1. Open Quick Start.
+2. Select Spider separately for passive crawling.
+3. Enter your website URL.
+4. Start crawling.
+5. Inspect the Sites tab.
+6. Inspect the Alerts tab.
+7. Export the report.
+
+Use passive checks unless your authorization explicitly permits active testing. Automated Scan can perform active attacks.
+
+## Step 8. Save all your evidence
+
+Your final folder should look like this:
+
+```
+Vulnerability-Assessment/
+│
+├── DNS/
+│   └── dnsenum.txt
+│
+├── Nmap/
+│   └── nmap-results.txt
+│
+├── HTTP/
+│   └── headers.txt
+│
+├── ZAP/
+│   └── zap-report.html
+│
+└── Reports/
+    └── Final-Assessment.docx
+```
+
+## Step 9. Final combined assessment
+
+| Tool      | Main evidence                |
+| --------- | ---------------------------- |
+| dnsenum   | DNS enumeration              |
+| dig       | DNS records                  |
+| Nmap      | Open ports and services      |
+| cURL      | HTTP headers                 |
+| OpenSSL   | TLS certificate              |
+| MXToolbox | DNS and email configuration  |
+| Shodan    | Public IP exposure           |
+| OWASP ZAP | Crawling and security alerts |
+
+My suggestion: Execute one step at a time and save every output. We can use the collected evidence to update your report without repeating scans unnecessarily.
